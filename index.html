@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Corporate Finance & Freelance Operations Suite</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ===== APP HEADER ===== -->
+  <header class="app-header">
+    <div class="header-brand">
+      <span class="brand-icon">💼</span>
+      <div>
+        <h1>FinOps Suite</h1>
+        <p>Corporate Finance &amp; Freelance Operations</p>
+      </div>
+    </div>
+    <button class="theme-toggle" id="themeToggle" title="Toggle Theme">🌙</button>
+  </header>
+
+  <!-- ===== TAB NAVIGATION ===== -->
+  <nav class="tab-nav" role="tablist">
+    <button class="tab-btn active" data-tab="expenses" role="tab" aria-selected="true">
+      <span>📊</span> Expense Tracker
+    </button>
+    <button class="tab-btn" data-tab="lending" role="tab" aria-selected="false">
+      <span>🏦</span> P2P Lending
+    </button>
+    <button class="tab-btn" data-tab="invoices" role="tab" aria-selected="false">
+      <span>🧾</span> Invoice Generator
+    </button>
+  </nav>
+
+  <main class="app-main">
+
+    <!-- ============================================================ -->
+    <!-- MODULE 1: CORPORATE EXPENSE TRACKER & APPROVAL WORKFLOW      -->
+    <!-- ============================================================ -->
+    <section id="tab-expenses" class="tab-panel active" role="tabpanel">
+
+      <!-- Role Switcher -->
+      <div class="role-switcher">
+        <span class="role-label">View As:</span>
+        <div class="toggle-group">
+          <button class="role-btn active" id="roleEmployee">👤 Employee</button>
+          <button class="role-btn" id="roleManager">🛡️ Manager</button>
+        </div>
+      </div>
+
+      <!-- Dashboard Stats -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <span class="stat-icon">📥</span>
+          <div>
+            <p class="stat-label">Total Submitted</p>
+            <p class="stat-value" id="statTotal">$0.00</p>
+          </div>
+        </div>
+        <div class="stat-card approved">
+          <span class="stat-icon">✅</span>
+          <div>
+            <p class="stat-label">Total Approved</p>
+            <p class="stat-value" id="statApproved">$0.00</p>
+          </div>
+        </div>
+        <div class="stat-card pending">
+          <span class="stat-icon">⏳</span>
+          <div>
+            <p class="stat-label">Total Pending</p>
+            <p class="stat-value" id="statPending">$0.00</p>
+          </div>
+        </div>
+        <div class="stat-card rejected">
+          <span class="stat-icon">❌</span>
+          <div>
+            <p class="stat-label">Total Rejected</p>
+            <p class="stat-value" id="statRejected">$0.00</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Expense Submission Form (Employee View) -->
+      <div class="card" id="expenseFormCard">
+        <h2 class="card-title">Submit New Expense</h2>
+        <form id="expenseForm" class="form-grid" novalidate>
+          <div class="form-group">
+            <label for="expTitle">Expense Title *</label>
+            <input type="text" id="expTitle" placeholder="e.g. Client Dinner" required />
+          </div>
+          <div class="form-group">
+            <label for="expCategory">Category *</label>
+            <select id="expCategory" required>
+              <option value="">Select Category</option>
+              <option value="Travel">✈️ Travel</option>
+              <option value="Food">🍽️ Food & Dining</option>
+              <option value="Supplies">📦 Office Supplies</option>
+              <option value="Software">💻 Software & Tools</option>
+              <option value="Marketing">📣 Marketing</option>
+              <option value="Other">📌 Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="expAmount">Amount ($) *</label>
+            <input type="number" id="expAmount" placeholder="0.00" min="0.01" step="0.01" required />
+          </div>
+          <div class="form-group">
+            <label for="expDate">Date *</label>
+            <input type="date" id="expDate" required />
+          </div>
+          <div class="form-group full-width">
+            <label for="expReceipt">Mock Receipt Upload</label>
+            <input type="file" id="expReceipt" accept="image/*,.pdf" />
+            <small>Accepted: Images, PDF (mock — not stored)</small>
+          </div>
+          <div class="form-group full-width">
+            <label for="expNotes">Notes</label>
+            <textarea id="expNotes" rows="2" placeholder="Additional details..."></textarea>
+          </div>
+          <div class="full-width">
+            <button type="submit" class="btn btn-primary">Submit Expense</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Expense List -->
+      <div class="card">
+        <h2 class="card-title">Expense Records</h2>
+        <div id="expenseList" class="expense-list">
+          <p class="empty-state">No expenses submitted yet.</p>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- MODULE 2: MICRO-FINANCE / P2P LENDING SIMULATOR              -->
+    <!-- ============================================================ -->
+    <section id="tab-lending" class="tab-panel" role="tabpanel">
+
+      <!-- Wallet Section -->
+      <div class="lending-grid">
+        <div class="card wallet-card">
+          <h2 class="card-title">💳 My Wallet</h2>
+          <div class="balance-display">
+            <p class="balance-label">Available Balance</p>
+            <p class="balance-amount" id="walletBalance">$0.00</p>
+          </div>
+          <div class="wallet-actions">
+            <div class="form-group">
+              <label for="walletAmount">Amount ($)</label>
+              <input type="number" id="walletAmount" placeholder="Enter amount" min="1" step="0.01" />
+            </div>
+            <div class="btn-row">
+              <button class="btn btn-success" id="depositBtn">⬆️ Deposit</button>
+              <button class="btn btn-danger" id="withdrawBtn">⬇️ Withdraw</button>
+            </div>
+          </div>
+          <!-- Transaction History -->
+          <div class="transaction-log">
+            <h3>Recent Transactions</h3>
+            <ul id="transactionList"><li class="empty-state">No transactions yet.</li></ul>
+          </div>
+        </div>
+
+        <!-- Credit Score Widget -->
+        <div class="card credit-card">
+          <h2 class="card-title">📈 Credit Profile</h2>
+          <div class="credit-score-display">
+            <div class="score-ring" id="scoreRing">
+              <span id="creditScoreVal">700</span>
+            </div>
+            <p class="score-label" id="scoreLabel">Good</p>
+          </div>
+          <div class="credit-stats">
+            <div class="credit-stat">
+              <span>Active Loans</span>
+              <strong id="activeLoansCount">0</strong>
+            </div>
+            <div class="credit-stat">
+              <span>Total Debt</span>
+              <strong id="totalDebt">$0.00</strong>
+            </div>
+            <div class="credit-stat">
+              <span>Debt-to-Balance</span>
+              <strong id="debtRatio">0%</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Loan Application Form -->
+      <div class="card">
+        <h2 class="card-title">📋 Apply for a Loan</h2>
+        <form id="loanForm" class="form-grid" novalidate>
+          <div class="form-group">
+            <label for="loanAmount">Loan Amount ($) *</label>
+            <input type="number" id="loanAmount" placeholder="e.g. 5000" min="100" required />
+          </div>
+          <div class="form-group">
+            <label for="loanTerm">Term (Months) *</label>
+            <select id="loanTerm" required>
+              <option value="">Select Term</option>
+              <option value="6">6 Months</option>
+              <option value="12">12 Months</option>
+              <option value="24">24 Months</option>
+              <option value="36">36 Months</option>
+              <option value="60">60 Months</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="loanRate">Interest Rate (% p.a.) *</label>
+            <input type="number" id="loanRate" placeholder="e.g. 8.5" min="1" max="30" step="0.1" required />
+          </div>
+          <div class="form-group">
+            <label for="loanPurpose">Purpose</label>
+            <select id="loanPurpose">
+              <option value="Business">Business Expansion</option>
+              <option value="Personal">Personal</option>
+              <option value="Education">Education</option>
+              <option value="Medical">Medical</option>
+            </select>
+          </div>
+          <!-- Live EMI Preview -->
+          <div class="full-width emi-preview" id="emiPreview" style="display:none;">
+            <div class="emi-stat"><span>Monthly EMI</span><strong id="previewEMI">-</strong></div>
+            <div class="emi-stat"><span>Total Payable</span><strong id="previewTotal">-</strong></div>
+            <div class="emi-stat"><span>Total Interest</span><strong id="previewInterest">-</strong></div>
+          </div>
+          <div class="full-width">
+            <button type="submit" class="btn btn-primary">Apply for Loan</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Active Loans -->
+      <div class="card">
+        <h2 class="card-title">🏦 Active Loans & Repayment</h2>
+        <div id="loanList" class="loan-list">
+          <p class="empty-state">No active loans.</p>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- MODULE 3: FREELANCER INVOICE & CONTRACT GENERATOR            -->
+    <!-- ============================================================ -->
+    <section id="tab-invoices" class="tab-panel" role="tabpanel">
+
+      <div class="invoice-layout">
+
+        <!-- Invoice Builder Form -->
+        <div class="invoice-builder">
+          <div class="card">
+            <h2 class="card-title">🧾 Invoice Builder</h2>
+            <form id="invoiceForm" class="form-grid" novalidate>
+              <div class="form-group">
+                <label for="invNumber">Invoice # *</label>
+                <input type="text" id="invNumber" placeholder="INV-001" required />
+              </div>
+              <div class="form-group">
+                <label for="invDate">Invoice Date *</label>
+                <input type="date" id="invDate" required />
+              </div>
+              <div class="form-group">
+                <label for="invDueDate">Due Date *</label>
+                <input type="date" id="invDueDate" required />
+              </div>
+              <div class="form-group">
+                <label for="invTax">Tax Rate (%)</label>
+                <input type="number" id="invTax" value="18" min="0" max="100" step="0.1" />
+              </div>
+              <div class="form-group full-width">
+                <label for="invClientName">Client Name *</label>
+                <input type="text" id="invClientName" placeholder="Client / Company Name" required />
+              </div>
+              <div class="form-group full-width">
+                <label for="invClientEmail">Client Email</label>
+                <input type="email" id="invClientEmail" placeholder="client@company.com" />
+              </div>
+              <div class="form-group full-width">
+                <label for="invFreelancerName">Your Name / Company *</label>
+                <input type="text" id="invFreelancerName" placeholder="Your Name or Business" required />
+              </div>
+            </form>
+
+            <!-- Line Items -->
+            <div class="line-items-section">
+              <div class="line-items-header">
+                <h3>Line Items</h3>
+                <button class="btn btn-sm btn-outline" id="addLineItem">+ Add Item</button>
+              </div>
+              <div class="line-items-table">
+                <div class="line-item-row header-row">
+                  <span>Description</span><span>Qty</span><span>Rate ($)</span><span>Total</span><span></span>
+                </div>
+                <div id="lineItemsContainer"></div>
+              </div>
+            </div>
+
+            <!-- Totals -->
+            <div class="invoice-totals">
+              <div class="total-row"><span>Subtotal</span><strong id="invSubtotal">$0.00</strong></div>
+              <div class="total-row"><span>Tax (<span id="taxRateDisplay">18</span>%)</span><strong id="invTaxAmt">$0.00</strong></div>
+              <div class="total-row grand-total"><span>Total Due</span><strong id="invGrandTotal">$0.00</strong></div>
+            </div>
+
+            <div class="btn-row" style="margin-top:1rem;">
+              <button class="btn btn-primary" id="saveInvoiceBtn">💾 Save Invoice</button>
+              <button class="btn btn-outline" id="previewContractBtn">📄 Preview Contract</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Saved Invoices List -->
+        <div class="invoice-sidebar">
+          <div class="card">
+            <h2 class="card-title">📁 Saved Invoices</h2>
+            <div id="invoiceList" class="invoice-list">
+              <p class="empty-state">No invoices saved yet.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contract Preview Modal -->
+      <div id="contractModal" class="modal" role="dialog" aria-modal="true" aria-label="Contract Preview" style="display:none;">
+        <div class="modal-overlay" id="modalOverlay"></div>
+        <div class="modal-content" id="contractPreview">
+          <!-- Dynamically populated by JS -->
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast" role="alert" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
